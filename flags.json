@@ -1,6 +1,7 @@
 [
   {"code": "CN", "emoji": "🇨🇳", "name": "中国", "nameEn": "China"},
   {"code": "JP", "emoji": "🇯🇵", "name": "日本", "nameEn": "Japan"},
+  {"code": "TW", "emoji": "🇹🇼", "name": "台湾", "nameEn": "Taiwan"},
   {"code": "US", "emoji": "🇺🇸", "name": "アメリカ", "nameEn": "United States"},
   {"code": "KR", "emoji": "🇰🇷", "name": "韓国", "nameEn": "South Korea"},
   {"code": "RU", "emoji": "🇷🇺", "name": "ロシア", "nameEn": "Russia"},
@@ -47,7 +48,6 @@
   {"code": "IR", "emoji": "🇮🇷", "name": "イラン", "nameEn": "Iran"},
   {"code": "IQ", "emoji": "🇮🇶", "name": "イラク", "nameEn": "Iraq"},
   {"code": "AF", "emoji": "🇦🇫", "name": "アフガニスタン", "nameEn": "Afghanistan"},
-  {"code": "TW", "emoji": "🇹🇼", "name": "台湾", "nameEn": "Taiwan"},
   {"code": "HK", "emoji": "🇭🇰", "name": "香港", "nameEn": "Hong Kong"},
   {"code": "MO", "emoji": "🇲🇴", "name": "マカオ", "nameEn": "Macau"},
   {"code": "CL", "emoji": "🇨🇱", "name": "チリ", "nameEn": "Chile"},

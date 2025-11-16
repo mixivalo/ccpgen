@@ -132,6 +132,7 @@ const FLAG_RENDER_CONFIG = {
 const FALLBACK_FLAGS = [
   {code: "CN", emoji: "🇨🇳", name: "中国"},
   {code: "JP", emoji: "🇯🇵", name: "日本"},
+  {code: "TW", emoji: "🇹🇼", name: "台湾"},
   {code: "US", emoji: "🇺🇸", name: "アメリカ"},
   {code: "KR", emoji: "🇰🇷", name: "韓国"},
   {code: "RU", emoji: "🇷🇺", name: "ロシア"},
