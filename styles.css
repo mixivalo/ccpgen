@@ -1,0 +1,147 @@
+:root {
+  --panel-bg: #111;
+  --border: #27272a;
+  --text: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #000;
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP",
+               "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  height: 100vh;
+  gap: 8px;
+}
+
+aside {
+  background: var(--panel-bg);
+  padding: 12px;
+  border-right: 1px solid #000;
+  overflow: auto;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+header {
+  padding: 10px 16px;
+  border-bottom: 1px solid #111;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.field {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  color: #cbd5e1;
+}
+
+.field input[type="text"],
+.field input[type="number"],
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 7px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #050505;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.inline {
+  display: flex;
+  gap: 6px;
+}
+
+.inline > * {
+  flex: 1;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 11px;
+}
+
+.btn {
+  appearance: none;
+  border-radius: 9px;
+  border: 1px solid #1f2937;
+  background: #111827;
+  color: #f9fafb;
+  padding: 7px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.btn.primary {
+  background: linear-gradient(180deg, #b91c1c, #7f1d1d);
+  border-color: #7f1d1d;
+}
+
+.canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+}
+
+canvas {
+  max-width: 100%;
+  max-height: 100vh;
+  height: auto;
+  width: auto;
+  background: #000;
+  display: block;
+}
+
+footer {
+  padding: 8px 12px;
+  border-top: 1px solid #111;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+  aside {
+    order: 2;
+  }
+  main {
+    order: 1;
+  }
+}
+
