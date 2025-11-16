@@ -2,130 +2,141 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <title>中共プロパガンダ・テキストジェネレーター</title>
+  <title data-i18n="title">中共プロパガンダ・テキストジェネレーター</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/i18next@23.7.6/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/i18next-browser-languagedetector@7.2.0/dist/umd/i18nextBrowserLanguageDetector.min.js"></script>
 </head>
 <body>
 <div class="app">
   <aside>
-    <h2 style="font-size:14px;margin:4px 0 10px;">設定</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <h2 style="font-size:14px;margin:4px 0 10px;" data-i18n="settings">設定</h2>
+      <select id="languageSelect" style="font-size: 11px; padding: 4px 6px;">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh-Hant">繁體中文</option>
+        <option value="zh-Hans">简体中文</option>
+        <option value="ko">한국어</option>
+      </select>
+    </div>
 
     <!-- 背景画像選択 -->
     <div class="field">
-      <label>背景画像選択</label>
+      <label data-i18n="backgroundSelect">背景画像選択</label>
       <select id="bgSelect">
-        <option value="background.png">外交部ver</option>
-        <option value="background2.png">国防部ver</option>
-        <option value="background3.png">毛宁ver</option>
+        <option value="background.png" data-i18n="backgroundForeignAffairs">外交部ver</option>
+        <option value="background2.png" data-i18n="backgroundDefense">国防部ver</option>
+        <option value="background3.png" data-i18n="backgroundMaoNing">毛宁ver</option>
       </select>
-      <div class="muted">背景を切り替え</div>
+      <div class="muted" data-i18n="backgroundSelectDesc">背景を切り替え</div>
     </div>
 
     <!-- 国旗選択（毛宁verのときのみ表示） -->
     <div class="field" id="flagSelectContainer" style="display: none;">
-      <label>ヘッダー国旗選択</label>
+      <label data-i18n="flagSelect">ヘッダー国旗選択</label>
       <div class="inline">
         <div class="field">
-          <label>国旗1</label>
+          <label data-i18n="flag1">国旗1</label>
           <select id="flag1">
-            <option value="">読み込み中...</option>
+            <option value="" data-i18n="loading">読み込み中...</option>
           </select>
         </div>
         <div class="field">
-          <label>国旗2</label>
+          <label data-i18n="flag2">国旗2</label>
           <select id="flag2">
-            <option value="">読み込み中...</option>
+            <option value="" data-i18n="loading">読み込み中...</option>
           </select>
         </div>
       </div>
-      <div class="muted">毛宁verのときのみ表示</div>
+      <div class="muted" data-i18n="flagSelectDesc">毛宁verのときのみ表示</div>
     </div>
     
     <div class="field">
-      <label>メインテキスト</label>
-      <textarea id="text" placeholder="“日本は再び軍国主義の過ちを繰り返すつもりなのか…”"></textarea>
+      <label data-i18n="mainText">メインテキスト</label>
+      <textarea id="text" data-i18n="[placeholder]mainTextPlaceholder" placeholder="“日本は再び軍国主義の過ちを繰り返すつもりなのか…”"></textarea>
     </div>
 
     <!-- 選択部分を金色にするボタン -->
     <div class="field">
-      <button class="btn" id="highlightGoldBtn" type="button">
+      <button class="btn" id="highlightGoldBtn" type="button" data-i18n="highlightGold">
         選択部分を金色にする
       </button>
-      <div class="muted">
+      <div class="muted" data-i18n="highlightGoldDesc">
         テキスト内で範囲選択してから押すと、その部分だけ金色で描画されます。
       </div>
     </div>
 
     <div class="inline">
       <div class="field">
-        <label>本文フォントサイズ(px)</label>
+        <label data-i18n="fontSize">本文フォントサイズ(px)</label>
         <input id="fontSize" type="number" value="80" min="24" max="160" step="2">
       </div>
       <div class="field">
-        <label>行間(倍率)</label>
+        <label data-i18n="lineHeight">行間(倍率)</label>
         <input id="lineHeight" type="number" value="1.25" step="0.05" min="1" max="2">
       </div>
     </div>
 
     <div class="inline">
       <div class="field">
-        <label>左右マージン(%)</label>
+        <label data-i18n="marginX">左右マージン(%)</label>
         <input id="marginX" type="number" value="12" min="5" max="25">
       </div>
       <div class="field">
-        <label>上からの開始位置(%)</label>
+        <label data-i18n="startY">上からの開始位置(%)</label>
         <input id="startY" type="number" value="22" min="10" max="40">
       </div>
     </div>
 
     <div class="inline">
       <div class="field">
-        <label>テキスト色</label>
+        <label data-i18n="textColor">テキスト色</label>
         <input id="textColor" type="color" value="#fdf5e6">
       </div>
       <div class="field">
-        <label>影(ぼかし px)</label>
+        <label data-i18n="shadowBlur">影(ぼかし px)</label>
         <input id="shadowBlur" type="number" value="6" min="0" max="30">
       </div>
     </div>
 
     <div class="field">
-      <label>フォント</label>
+      <label data-i18n="font">フォント</label>
       <select id="fontFamily">
-        <option value="serif">明朝体風 (Noto Serif JP)</option>
-        <option value="sans">ゴシック体風 (Noto Sans JP)</option>
+        <option value="serif" data-i18n="fontSerif">明朝体風 (Noto Serif JP)</option>
+        <option value="sans" data-i18n="fontSans">ゴシック体風 (Noto Sans JP)</option>
       </select>
     </div>
 
     <div class="field">
-      <label>引用符</label>
+      <label data-i18n="quoteMode">引用符</label>
       <select id="quoteMode">
-        <option value="both">“ … ” を付ける</option>
-        <option value="none">付けない</option>
+        <option value="both" data-i18n="quoteBoth">" … " を付ける</option>
+        <option value="none" data-i18n="quoteNone">付けない</option>
       </select>
     </div>
 
     <div class="field">
-      <label>フッターテキスト（任意・一番下）</label>
-      <input id="footerText" type="text" placeholder="中国外交部報道官 2025年11月13日">
-      <div class="muted">空ならフッター非表示</div>
+      <label data-i18n="footerText">フッターテキスト（任意・一番下）</label>
+      <input id="footerText" type="text" data-i18n="[placeholder]footerTextPlaceholder" placeholder="中国外交部報道官 2025年11月13日">
+      <div class="muted" data-i18n="footerTextDesc">空ならフッター非表示</div>
     </div>
 
     <div class="field">
-      <label>フッターフォントサイズ(px)</label>
+      <label data-i18n="footerSize">フッターフォントサイズ(px)</label>
       <input id="footerSize" type="number" value="32" min="18" max="80">
     </div>
 
     <div style="margin-top:10px;">
-      <button class="btn" id="renderBtn">再描画</button>
-      <button class="btn primary" id="saveBtn">JPGとして保存</button>
-      <div class="muted">右クリックで保存したほうが早いかも</div>
+      <button class="btn" id="renderBtn" data-i18n="render">再描画</button>
+      <button class="btn primary" id="saveBtn" data-i18n="save">JPGとして保存</button>
+      <div class="muted" data-i18n="saveDesc">右クリックで保存したほうが早いかも</div>
     </div>
   </aside>
 
   <main>
-    <header>中共プロパガンダ・テキストジェネレーター</header>
+    <header data-i18n="header">中共プロパガンダ・テキストジェネレーター</header>
     <div class="canvas-wrap">
       <canvas id="cv"></canvas>
     </div>
@@ -133,6 +144,117 @@
 </div>
 
 <script>
+  // i18next Initialization
+  let i18nextInstance = null;
+  
+  async function initI18next() {
+    i18nextInstance = i18next.createInstance();
+    
+    await i18nextInstance
+      .use(i18nextBrowserLanguageDetector)
+      .init({
+        fallbackLng: 'ja',
+        debug: false,
+        resources: {
+          ja: {
+            translation: await fetch('./locales/ja/translation.json').then(r => r.json())
+          },
+          en: {
+            translation: await fetch('./locales/en/translation.json').then(r => r.json())
+          },
+          'zh-Hant': {
+            translation: await fetch('./locales/zh-Hant/translation.json').then(r => r.json())
+          },
+          'zh-Hans': {
+            translation: await fetch('./locales/zh-Hans/translation.json').then(r => r.json())
+          },
+          ko: {
+            translation: await fetch('./locales/ko/translation.json').then(r => r.json())
+          }
+        }
+      });
+    
+    // Update UI with translations
+    updateTranslations();
+    
+    // Setup language selector
+    const langSelect = document.getElementById('languageSelect');
+    langSelect.value = i18nextInstance.language;
+    langSelect.addEventListener('change', (e) => {
+      i18nextInstance.changeLanguage(e.target.value).then(() => {
+        updateTranslations();
+        updateSelectOptions();
+        updateInitialText();
+        updateFooterText();
+        render();
+      });
+    });
+  }
+
+  function updateTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key.startsWith('[')) {
+        // Handle attributes like [placeholder]
+        const match = key.match(/\[(\w+)\](.+)/);
+        if (match) {
+          const attr = match[1];
+          const transKey = match[2];
+          el.setAttribute(attr, i18nextInstance.t(transKey));
+        }
+      } else {
+        el.textContent = i18nextInstance.t(key);
+      }
+    });
+    
+    // Update title
+    document.title = i18nextInstance.t('title');
+  }
+
+  function updateSelectOptions() {
+    // Update select options that have data-i18n
+    document.querySelectorAll('select option[data-i18n]').forEach(option => {
+      const key = option.getAttribute('data-i18n');
+      option.textContent = i18nextInstance.t(key);
+    });
+  }
+
+  function updateInitialText() {
+    const lang = i18nextInstance.language;
+    if (lang === 'en') {
+      els.text.value = 
+        "Is Japan going to repeat the mistakes of militarism again?\n\n" +
+        "Is it going to make enemies of the Chinese people and Asian people again?\n\n" +
+        "Is it trying to overturn the post-war international order?";
+    } else if (lang === 'ko') {
+      els.text.value = 
+        "일본이 다시 군국주의의 실수를 반복하려는가\n\n" +
+        "다시 중국 인민과 아시아 인민을 적으로 돌리려는가\n\n" +
+        "전후 국제 질서를 뒤엎으려 하는가";
+    } else if (lang === 'zh-Hans') {
+      els.text.value = 
+        "日本是否要再次重蹈军国主义的错误\n\n" +
+        "是否要再次与中国人民和亚洲人民为敌\n\n" +
+        "是否要颠覆战后的国际秩序";
+    } else if (lang === 'zh-Hant') {
+      els.text.value = 
+        "日本是否要再次重蹈軍國主義的錯誤\n\n" +
+        "是否要再次與中國人民和亞洲人民為敵\n\n" +
+        "是否要顛覆戰後的國際秩序";
+    } else {
+      // Japanese default
+      els.text.value = 
+        "日本は再び軍国主義の過ちを繰り返すつもりなのか\n\n" +
+        "再び中国人民とアジア人民を敵に回すつもりなのか\n\n" +
+        "戦後の国際秩序を覆そうとしているのか";
+    }
+  }
+
+  function updateFooterText() {
+    const currentBg = els.bgSelect.value;
+    els.footerText.value = getFooterText(currentBg);
+  }
+
   // Constants
   const HIGHLIGHT_COLOR = "#D8AE5C";
   const FLAG_DEFAULT_CODES = { flag1: 'CN', flag2: 'JP' };
@@ -141,10 +263,13 @@
     DEFENSE: 'background2.png',
     MAO_NING: 'background3.png'
   };
-  const FOOTER_PREFIXES = {
-    FOREIGN_AFFAIRS: '中国外交部報道官',
-    DEFENSE: '中国国防部報道官'
-  };
+  
+  function getFooterPrefixes() {
+    return {
+      FOREIGN_AFFAIRS: i18nextInstance ? i18nextInstance.t('footerForeignAffairs') : '中国外交部報道官',
+      DEFENSE: i18nextInstance ? i18nextInstance.t('footerDefense') : '中国国防部報道官'
+    };
+  }
   const FLAG_RENDER_CONFIG = {
     sizeRatio: 0.11,
     yRatio: 0.1,
@@ -204,12 +329,33 @@
     return fontMap[els.fontFamily.value] || fontMap.sans;
   }
 
-  function getFooterText(backgroundType) {
-    const today = formatDateJP(new Date());
-    if (backgroundType === BACKGROUND_TYPES.DEFENSE) {
-      return `${FOOTER_PREFIXES.DEFENSE} ${today}`;
+  function formatDate(d, lang) {
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    
+    if (lang === 'en') {
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                      'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${months[m - 1]} ${day}, ${y}`;
+    } else if (lang === 'ko') {
+      return `${y}년 ${m}월 ${day}일`;
+    } else if (lang === 'zh-Hans' || lang === 'zh-Hant') {
+      return `${y}年${m}月${day}日`;
     }
-    return `${FOOTER_PREFIXES.FOREIGN_AFFAIRS} ${today}`;
+    // Japanese default
+    return `${y}年${m}月${day}日`;
+  }
+
+  function getFooterText(backgroundType) {
+    const lang = i18nextInstance ? i18nextInstance.language : 'ja';
+    const today = formatDate(new Date(), lang);
+    const prefixes = getFooterPrefixes();
+    
+    if (backgroundType === BACKGROUND_TYPES.DEFENSE) {
+      return `${prefixes.DEFENSE} ${today}`;
+    }
+    return `${prefixes.FOREIGN_AFFAIRS} ${today}`;
   }
 
   // Background Loading
@@ -506,12 +652,12 @@
   }
 
   // Initialization
-  function init() {
-    els.text.value = 
-      "日本は再び軍国主義の過ちを繰り返すつもりなのか\n\n" +
-      "再び中国人民とアジア人民を敵に回すつもりなのか\n\n" +
-      "戦後の国際秩序を覆そうとしているのか";
+  async function init() {
+    // Initialize i18next first
+    await initI18next();
     
+    // Set initial text based on language
+    updateInitialText();
     els.footerText.value = getFooterText(BACKGROUND_TYPES.FOREIGN_AFFAIRS);
     els.flagSelectContainer.style.display = 'none';
     
@@ -520,8 +666,8 @@
     setupEventListeners();
   }
 
-  window.onload = () => {
-    init();
+  window.onload = async () => {
+    await init();
     render();
   };
 </script>
