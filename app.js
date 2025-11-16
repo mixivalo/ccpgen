@@ -362,6 +362,44 @@ function layoutTokens(ctx, tokens, maxWidth) {
   return lines;
 }
 
+// 最適なフォントサイズを計算（テキストが収まるように）
+function calculateOptimalFontSize(ctx, tokens, maxWidth, maxHeight, lineHeight, fontFamily, minFontSize = 24, maxFontSize = 200) {
+  let fontSize = maxFontSize;
+  let lines;
+  
+  // 二分探索で最適なフォントサイズを見つける
+  while (maxFontSize - minFontSize > 1) {
+    fontSize = Math.floor((minFontSize + maxFontSize) / 2);
+    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    
+    lines = layoutTokens(ctx, tokens, maxWidth);
+    const totalHeight = lines.length * fontSize * lineHeight;
+    
+    if (totalHeight <= maxHeight) {
+      minFontSize = fontSize; // このサイズで収まるので、もっと大きくできる
+    } else {
+      maxFontSize = fontSize; // 収まらないので、もっと小さくする必要がある
+    }
+  }
+  
+  // 最終確認：計算されたサイズで実際に収まるか
+  fontSize = minFontSize;
+  ctx.font = `700 ${fontSize}px ${fontFamily}`;
+  lines = layoutTokens(ctx, tokens, maxWidth);
+  const totalHeight = lines.length * fontSize * lineHeight;
+  
+  if (totalHeight > maxHeight) {
+    // まだ収まらない場合は、さらに縮小
+    fontSize = Math.floor(fontSize * (maxHeight / totalHeight));
+    fontSize = Math.max(fontSize, 24); // 最小サイズを保証
+    // 再計算
+    ctx.font = `700 ${fontSize}px ${fontFamily}`;
+    lines = layoutTokens(ctx, tokens, maxWidth);
+  }
+  
+  return { fontSize, lines };
+}
+
 // Rendering Functions
 function drawBackground(ctx, width, height) {
   if (bgImg && bgImg.complete) {
@@ -399,7 +437,7 @@ function drawMainText(ctx, width, height) {
   if (!els.fontSize || !els.lineHeight || !els.marginX || !els.startY || 
       !els.textColor || !els.shadowBlur || !els.text || !els.quoteMode) return;
   
-  const fontSize = parseInt(els.fontSize.value, 10) || 80;
+  const baseFontSize = parseInt(els.fontSize.value, 10) || 80;
   const lineHeight = parseFloat(els.lineHeight.value) || 1.25;
   const marginX = (parseFloat(els.marginX.value) || 10) / 100;
   const startYRatio = (parseFloat(els.startY.value) || 20) / 100;
@@ -410,6 +448,11 @@ function drawMainText(ctx, width, height) {
   const areaW = width - areaX * 2;
   const startY = height * startYRatio;
 
+  // 利用可能な高さを計算（フッターのスペースを考慮）
+  const footerText = els.footerText ? els.footerText.value.trim() : '';
+  const footerHeight = footerText ? height * 0.12 : 0; // フッターがある場合の余白
+  const availableHeight = height - startY - footerHeight;
+
   let raw = els.text.value;
   if (els.quoteMode.value === "both" && raw.trim()) {
     raw = "“" + raw + "”";
@@ -419,10 +462,28 @@ function drawMainText(ctx, width, height) {
   ctx.textBaseline = "top";
   ctx.shadowColor = "rgba(0,0,0,0.85)";
   ctx.shadowBlur = shadowBlur;
-  ctx.font = `700 ${fontSize}px ${getFontFamily()}`;
-
+  
+  // フォントファミリーを取得
+  const fontFamily = getFontFamily();
+  
+  // 一時的にフォントを設定してトークンを解析
+  ctx.font = `700 ${baseFontSize}px ${fontFamily}`;
   const tokens = parseTokens(raw, baseColor, HIGHLIGHT_COLOR);
-  const lines = layoutTokens(ctx, tokens, areaW);
+  
+  // 最適なフォントサイズを計算
+  const { fontSize, lines } = calculateOptimalFontSize(
+    ctx, 
+    tokens, 
+    areaW, 
+    availableHeight, 
+    lineHeight,
+    fontFamily,
+    24, // 最小フォントサイズ
+    baseFontSize // 最大フォントサイズ（ユーザー指定値）
+  );
+  
+  // 計算されたフォントサイズで再設定
+  ctx.font = `700 ${fontSize}px ${fontFamily}`;
   const linePx = fontSize * lineHeight;
 
   let y = startY;
