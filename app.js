@@ -16,6 +16,9 @@ function loadEmojiFont() {
 async function initI18next() {
   i18nextInstance = i18next.createInstance();
   
+  // Available languages
+  const availableLanguages = ['ja', 'en', 'zh-Hant', 'zh-Hans', 'ko'];
+  
   await i18nextInstance
     .use(i18nextBrowserLanguageDetector)
     .init({
@@ -40,25 +43,57 @@ async function initI18next() {
       }
     });
   
+  // Normalize language code to match available options
+  let detectedLang = i18nextInstance.language;
+  // Handle language codes like 'en-US' -> 'en', 'zh-TW' -> 'zh-Hant', etc.
+  if (detectedLang.startsWith('en')) {
+    detectedLang = 'en';
+  } else if (detectedLang.startsWith('zh')) {
+    // Try to map Chinese variants
+    if (detectedLang.includes('TW') || detectedLang.includes('Hant') || detectedLang === 'zh-Hant') {
+      detectedLang = 'zh-Hant';
+    } else if (detectedLang.includes('CN') || detectedLang.includes('Hans') || detectedLang === 'zh-Hans') {
+      detectedLang = 'zh-Hans';
+    } else {
+      // Default to Traditional Chinese if can't determine
+      detectedLang = 'zh-Hant';
+    }
+  } else if (detectedLang.startsWith('ko')) {
+    detectedLang = 'ko';
+  } else if (detectedLang.startsWith('ja')) {
+    detectedLang = 'ja';
+  }
+  
+  // Ensure the detected language is in available languages, otherwise use fallback
+  if (!availableLanguages.includes(detectedLang)) {
+    detectedLang = 'ja';
+  }
+  
+  // Set the language if it's different from detected
+  if (detectedLang !== i18nextInstance.language) {
+    await i18nextInstance.changeLanguage(detectedLang);
+  }
+  
   // Update UI with translations
   updateTranslations();
   
   // Setup language selector
   const langSelect = document.getElementById('languageSelect');
   if (langSelect) {
-    langSelect.value = i18nextInstance.language;
-  langSelect.addEventListener('change', (e) => {
-    i18nextInstance.changeLanguage(e.target.value).then(() => {
-      updateTranslations();
-      updateSelectOptions();
-      // Update text based on current background and new language
-      updateInitialText();
-      updateFooterText();
-      // Update flag names based on new language
-      populateFlagSelects();
-      render();
+    // Ensure the select value matches the current language
+    langSelect.value = detectedLang;
+    langSelect.addEventListener('change', (e) => {
+      i18nextInstance.changeLanguage(e.target.value).then(() => {
+        updateTranslations();
+        updateSelectOptions();
+        // Update text based on current background and new language
+        updateInitialText();
+        updateFooterText();
+        // Update flag names based on new language
+        populateFlagSelects();
+        render();
+      });
     });
-  });
   }
 }
 
