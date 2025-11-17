@@ -796,5 +796,10 @@ window.onload = async () => {
   if (els.cv) {
     render();
   }
+  
+  // Open settings panel automatically on mobile devices
+  if (window.innerWidth <= 900) {
+    openSettingsPanel();
+  }
 };
 
