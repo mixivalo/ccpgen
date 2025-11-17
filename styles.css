@@ -18,7 +18,7 @@ body {
   background: #000;
   color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", "Noto Sans JP",
-               "Hiragino Sans", "Yu Gothic", sans-serif;
+               "Hiragino Sans", "Yu Gothic", "Noto Color Emoji", sans-serif;
 }
 
 .app {
@@ -83,6 +83,11 @@ header {
   background: #050505;
   color: var(--text);
   font-size: 13px;
+}
+
+#flag1, #flag2 {
+  font-family: "Noto Color Emoji", system-ui, -apple-system, "Segoe UI",
+               "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif;
 }
 
 .field textarea {

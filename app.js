@@ -1,5 +1,17 @@
 // i18next Initialization
 let i18nextInstance = null;
+const emojiFontPromise = loadEmojiFont();
+
+function loadEmojiFont() {
+  if (document.fonts && document.fonts.load) {
+    try {
+      return document.fonts.load('400 1em "Noto Color Emoji"');
+    } catch (err) {
+      console.warn('Failed to request emoji font load:', err);
+    }
+  }
+  return Promise.resolve();
+}
 
 async function initI18next() {
   i18nextInstance = i18next.createInstance();
@@ -454,7 +466,7 @@ function drawFlags(ctx, width, height) {
   const flagX = (width - totalWidth) / 2;
 
   ctx.save();
-  ctx.font = `${flagSize}px Arial, sans-serif`;
+  ctx.font = `${flagSize}px "Noto Color Emoji","Twemoji Mozilla","Apple Color Emoji","Segoe UI Emoji",sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   
@@ -699,8 +711,17 @@ async function init() {
   setupEventListeners();
 }
 
+async function waitForEmojiFont() {
+  try {
+    await emojiFontPromise;
+  } catch (err) {
+    console.warn('Emoji font load failed, falling back to system fonts:', err);
+  }
+}
+
 window.onload = async () => {
   await init();
+  await waitForEmojiFont();
   if (els.cv) {
     render();
   }
