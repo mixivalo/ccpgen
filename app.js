@@ -152,7 +152,8 @@ const FLAG_DEFAULT_CODES = { flag1: 'CN', flag2: 'JP' };
 const BACKGROUND_TYPES = {
   FOREIGN_AFFAIRS: 'background.png',
   DEFENSE: 'background2.png',
-  MAO_NING: 'background3.png'
+  MAO_NING: 'background3.png',
+  MAO_NING_V2: 'background4.png'
 };
 
 function getFooterPrefixes() {
