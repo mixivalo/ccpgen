@@ -31,6 +31,7 @@ body {
 aside {
   background: var(--panel-bg);
   padding: 12px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px) + 12px);
   border-right: 1px solid #000;
   overflow: auto;
 }
@@ -151,15 +152,97 @@ footer {
   color: #9ca3af;
 }
 
+.settings-toggle-btn,
+.settings-close-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.settings-toggle-btn:hover,
+.settings-close-btn:hover {
+  opacity: 1;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.settings-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.settings-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
   }
+  
   aside {
     order: 2;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    z-index: 999;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    border-right: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  
+  aside.active {
+    right: 0;
+  }
+  
   main {
     order: 1;
+  }
+  
+  .settings-toggle-btn {
+    display: flex;
+  }
+  
+  .settings-close-btn {
+    display: flex;
+  }
+}
+
+@media (min-width: 901px) {
+  .settings-toggle-btn,
+  .settings-close-btn {
+    display: none;
+  }
+  
+  .settings-overlay {
+    display: none !important;
   }
 }
 

@@ -659,6 +659,25 @@ function handleSaveImage() {
   }, "image/jpeg", 0.92);
 }
 
+// Settings Panel Toggle Functions
+function openSettingsPanel() {
+  const panel = document.getElementById('settingsPanel');
+  const overlay = document.getElementById('settingsOverlay');
+  if (panel) panel.classList.add('active');
+  if (overlay) overlay.classList.add('active');
+  // Prevent body scroll when panel is open on mobile
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSettingsPanel() {
+  const panel = document.getElementById('settingsPanel');
+  const overlay = document.getElementById('settingsOverlay');
+  if (panel) panel.classList.remove('active');
+  if (overlay) overlay.classList.remove('active');
+  // Restore body scroll
+  document.body.style.overflow = '';
+}
+
 // Event Listeners Setup
 function setupEventListeners() {
   const renderTriggerIds = [
@@ -685,6 +704,21 @@ function setupEventListeners() {
   }
   if (els.saveBtn) {
     els.saveBtn.addEventListener("click", handleSaveImage);
+  }
+  
+  // Settings panel toggle
+  const settingsToggle = document.getElementById('settingsToggle');
+  const settingsClose = document.getElementById('settingsClose');
+  const settingsOverlay = document.getElementById('settingsOverlay');
+  
+  if (settingsToggle) {
+    settingsToggle.addEventListener('click', openSettingsPanel);
+  }
+  if (settingsClose) {
+    settingsClose.addEventListener('click', closeSettingsPanel);
+  }
+  if (settingsOverlay) {
+    settingsOverlay.addEventListener('click', closeSettingsPanel);
   }
 }
 
