@@ -4,10 +4,11 @@
 
 ## 機能
 
-- **3つの背景テーマ**
+- **4つの背景テーマ**
   - 外交部ver（背景画像1）
-  - 国防部ver（背景画像2）
-  - 毛宁ver（背景画像3）
+  - 外交部2ver（背景画像2）
+  - 国防部ver（背景画像3）
+  - 毛宁ver（背景画像4）
 
 - **多言語対応**
   - 日本語
@@ -58,7 +59,8 @@ ccpgen/
 ├── flags.json          # 国旗データ（200以上の国旗）
 ├── default-texts.json  # 背景テーマと言語ごとのデフォルトテキスト
 ├── background.png      # 外交部ver背景画像
-├── background2.png      # 国防部ver背景画像
+├── background1.png     # 外交部2ver背景画像
+├── background2.png     # 国防部ver背景画像
 ├── background3.png     # 毛宁ver背景画像
 └── locales/            # 多言語翻訳ファイル
     ├── ja/             # 日本語
