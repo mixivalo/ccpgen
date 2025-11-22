@@ -249,6 +249,12 @@ function initializeDOMElements() {
     renderBtn: document.getElementById('renderBtn'),
     saveBtn: document.getElementById('saveBtn'),
     highlightGoldBtn: document.getElementById('highlightGoldBtn'),
+
+    // ★ 追加
+    highlightGradBtn: document.getElementById('highlightGradBtn'),
+    gradStartColor: document.getElementById('gradStartColor'),
+    gradEndColor: document.getElementById('gradEndColor'),
+
     flagSelectContainer: document.getElementById('flagSelectContainer'),
     flag1: document.getElementById('flag1'),
     flag2: document.getElementById('flag2')
@@ -396,13 +402,27 @@ function populateFlagSelects() {
     els.flag1.appendChild(createFlagOption(flag, FLAG_DEFAULT_CODES.flag1));
     els.flag2.appendChild(createFlagOption(flag, FLAG_DEFAULT_CODES.flag2));
   });
+  
+  // ★ブラウザが覚えてる古い value を上書きする
+  const default1 = flagsData.find(f => f.code === FLAG_DEFAULT_CODES.flag1) || flagsData[0];
+  const default2 = flagsData.find(f => f.code === FLAG_DEFAULT_CODES.flag2) || flagsData[1] || flagsData[0];
+
+  if (default1) els.flag1.value = default1.emoji;
+  if (default2) els.flag2.value = default2.emoji;
+
+  // 毛宁verが選ばれている場合はここで再描画しておくと安心
+  if (els.bgSelect && els.bgSelect.value === BACKGROUND_TYPES.MAO_NING) {
+    render();
+  }
 }
 
-// [g]...[/g] を解析して色付きトークン列に変換
+// [g]...[/g], [grad]...[/grad] を解析して色・スタイル付きトークン列に変換
 function parseTokens(text, baseColor, highlightColor) {
   const tokens = [];
   let i = 0;
   let currentColor = baseColor;
+  let currentGrad = false;
+
   while (i < text.length) {
     if (text.startsWith("[g]", i)) {
       currentColor = highlightColor;
@@ -414,10 +434,22 @@ function parseTokens(text, baseColor, highlightColor) {
       i += 4;
       continue;
     }
+    if (text.startsWith("[grad]", i)) {
+      currentGrad = true;
+      i += 6;
+      continue;
+    }
+    if (text.startsWith("[/grad]", i)) {
+      currentGrad = false;
+      i += 7;
+      continue;
+    }
+
     const ch = text[i];
-    tokens.push({ char: ch, color: currentColor });
+    tokens.push({ char: ch, color: currentColor, grad: currentGrad });
     i++;
   }
+
   return tokens;
 }
 
@@ -484,8 +516,7 @@ function calculateOptimalFontSize(ctx, tokens, maxWidth, maxHeight, lineHeight, 
   if (totalHeight > maxHeight) {
     // まだ収まらない場合は、さらに縮小
     fontSize = Math.floor(fontSize * (maxHeight / totalHeight));
-    fontSize = Math.max(fontSize, 24); // 最小サイズを保証
-    // 再計算
+    fontSize = Math.max(fontSize, 24);
     ctx.font = `700 ${fontSize}px ${fontFamily}`;
     lines = layoutTokens(ctx, tokens, maxWidth);
   }
@@ -584,8 +615,24 @@ function drawMainText(ctx, width, height) {
   for (const line of lines) {
     const xStart = (width - line.width) / 2;
     let x = xStart;
+
+    const hasGrad = line.tokens.some(t => t.grad);
+    let lineGradient = null;
+    if (hasGrad) {
+      const startCol = (els.gradStartColor && els.gradStartColor.value) || "#ffffff";
+      const endCol   = (els.gradEndColor   && els.gradEndColor.value)   || "#4b1b16";
+
+      lineGradient = ctx.createLinearGradient(0, y, 0, y + fontSize * 1.1);
+      lineGradient.addColorStop(0, startCol);
+      lineGradient.addColorStop(1, endCol);
+    }
+
     for (const t of line.tokens) {
-      ctx.fillStyle = t.color;
+      if (t.grad && lineGradient) {
+        ctx.fillStyle = lineGradient;
+      } else {
+        ctx.fillStyle = t.color;
+      }
       ctx.fillText(t.char, x, y);
       x += ctx.measureText(t.char).width;
     }
@@ -676,7 +723,31 @@ function handleHighlightGold() {
 
   ta.value = before + GOLD_TAG_OPEN + selected + GOLD_TAG_CLOSE + after;
 
-  const newPos = before.length + GOLD_TAG_OPEN.length + selected.length + GOLD_TAG_CLOSE.length;
+  const newPos = (before + GOLD_TAG_OPEN + selected + GOLD_TAG_CLOSE).length;
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = newPos;
+  render();
+}
+
+// ★ 追加：選択範囲を [grad][/grad] で囲む
+function handleHighlightGrad() {
+  if (!els.text) return;
+  
+  const ta = els.text;
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  if (start === end) return;
+
+  const value = ta.value;
+  const before = value.slice(0, start);
+  const selected = value.slice(start, end);
+  const after = value.slice(end);
+  const TAG_OPEN = "[grad]";
+  const TAG_CLOSE = "[/grad]";
+
+  ta.value = before + TAG_OPEN + selected + TAG_CLOSE + after;
+
+  const newPos = (before + TAG_OPEN + selected + TAG_CLOSE).length;
   ta.focus();
   ta.selectionStart = ta.selectionEnd = newPos;
   render();
@@ -732,7 +803,9 @@ function setupEventListeners() {
   const renderTriggerIds = [
     "text", "fontSize", "lineHeight", "marginX", "startY",
     "textColor", "highlightColor", "shadowBlur", "fontFamily", "quoteMode",
-    "footerText", "footerSize", "flag1", "flag2"
+    "footerText", "footerSize", "flag1", "flag2",
+    // ★ 追加：グラデ色変更でも再描画
+    "gradStartColor", "gradEndColor"
   ];
 
   renderTriggerIds.forEach(id => {
@@ -747,6 +820,9 @@ function setupEventListeners() {
   }
   if (els.highlightGoldBtn) {
     els.highlightGoldBtn.addEventListener('click', handleHighlightGold);
+  }
+  if (els.highlightGradBtn) {
+    els.highlightGradBtn.addEventListener('click', handleHighlightGrad);
   }
   if (els.renderBtn) {
     els.renderBtn.addEventListener("click", render);

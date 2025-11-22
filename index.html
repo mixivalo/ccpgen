@@ -77,13 +77,20 @@
       <textarea id="text" data-i18n="[placeholder]mainTextPlaceholder" placeholder="“日本は再び軍国主義の過ちを繰り返すつもりなのか…”"></textarea>
     </div>
 
-    <!-- 選択部分を金色にするボタン -->
+    <!-- 選択部分のハイライトボタン -->
     <div class="field">
-      <button class="btn" id="highlightGoldBtn" type="button" data-i18n="highlightGold">
-        選択部分を金色にする
-      </button>
+      <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:4px;">
+        <button class="btn" id="highlightGoldBtn" type="button" data-i18n="highlightGold">
+          選択部分を強調色にする
+        </button>
+        <!-- グラデーションタグボタン -->
+        <button class="btn" id="highlightGradBtn" type="button" data-i18n="highlightGrad">
+          選択部分をグラデーションにする
+        </button>
+      </div>
       <div class="muted" data-i18n="highlightGoldDesc">
-        テキスト内で範囲選択してから押すと、その部分だけ金色で描画されます。
+        テキスト内で範囲選択してから押すと、その部分だけ強調して描画されます。<br>
+        [g]…[/g] は単色、[grad]…[/grad] はグラデーションになります。
       </div>
     </div>
 
@@ -124,6 +131,21 @@
         <label data-i18n="shadowBlur">影(ぼかし px)</label>
         <input id="shadowBlur" type="number" value="6" min="0" max="30">
       </div>
+    </div>
+
+    <!-- グラデーション色指定 -->
+    <div class="inline">
+      <div class="field">
+        <label>グラデ開始色（上側）</label>
+        <input id="gradStartColor" type="color" value="#ffffff">
+      </div>
+      <div class="field">
+        <label>グラデ終了色（下側）</label>
+        <input id="gradEndColor" type="color" value="#4b1b16">
+      </div>
+    </div>
+    <div hidden class="muted" style="margin-bottom:8px;">
+      [grad]…[/grad] で囲んだ部分にだけ、この2色の縦グラデーションが適用されます。
     </div>
 
     <div class="field">
