@@ -193,6 +193,7 @@ const BACKGROUND_TYPES = {
   FOREIGN_AFFAIRS6: 'background1.2.3.png',
   FOREIGN_AFFAIRS7: 'background1.3.1.png',
   FOREIGN_AFFAIRS8: 'background1.3.2.png',
+  FOREIGN_AFFAIRS9: 'background1.4.1.png',
   DEFENSE: 'background2.png',
   MAO_NING: 'background3.png'
 };
@@ -207,6 +208,7 @@ function getFooterPrefixes() {
     FOREIGN_AFFAIRS6: i18nextInstance ? i18nextInstance.t('footerForeignAffairs6') : '中国外交部報道官',
     FOREIGN_AFFAIRS7: i18nextInstance ? i18nextInstance.t('footerForeignAffairs7') : '中国外交部報道官',
     FOREIGN_AFFAIRS8: i18nextInstance ? i18nextInstance.t('footerForeignAffairs8') : '中国外交部報道官',
+    FOREIGN_AFFAIRS9: i18nextInstance ? i18nextInstance.t('footerForeignAffairs9') : '中国外交部報道官',
     DEFENSE: i18nextInstance ? i18nextInstance.t('footerDefense') : '中国国防部報道官'
   };
 }
